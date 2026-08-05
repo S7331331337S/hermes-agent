@@ -1,0 +1,21 @@
+# mstrmnd workspace — project-local operator preferences
+_mstrmnd_version: 1
+
+# Human-readable workspace label (defaults to directory name when empty).
+label: ""
+
+# Focus areas the operator should keep in mind for this workspace.
+focus: []
+# Example:
+# focus:
+#   - Keep the CLI and gateway behavior aligned.
+#   - Prefer plugin surfaces over core patches.
+
+# Explicit do / don't lists (short bullets).
+prefer: []
+avoid: []
+
+# Optional pointers the layer may surface (paths relative to workspace root).
+context_paths:
+  - AGENTS.md
+  - SOUL.md
