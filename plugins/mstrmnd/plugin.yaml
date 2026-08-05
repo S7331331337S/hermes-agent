@@ -1,0 +1,14 @@
+name: mstrmnd
+version: 0.1.0
+description: >
+  Intelligence layer between the Hermes harness and the operator —
+  vision/design alignment, workspace config, and an extensible module
+  framework for agent alignment that scales with product intent.
+author: mstrmnd / Hermes Agent
+provides_hooks:
+  - on_session_start
+  - on_session_end
+  - pre_llm_call
+  - pre_tool_call
+provides_commands:
+  - mstrmnd

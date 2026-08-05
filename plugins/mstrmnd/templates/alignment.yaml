@@ -1,0 +1,23 @@
+# mstrmnd alignment — behavioral constraints for the operator
+_mstrmnd_version: 1
+
+# Soft guidance injected each session (or first turn). Non-blocking.
+guidance:
+  - Follow workspace conventions before inventing new ones.
+  - Prefer small, reversible changes; state assumptions when uncertain.
+  - Do not weaken security, privacy, or approval boundaries.
+
+# Hard policy gates (optional). Matched against tool name + arg snippets.
+# action: warn (default via guidance) | block
+policies: []
+# Example:
+# policies:
+#   - id: no-force-push
+#     tools: [terminal]
+#     match: "git push --force"
+#     action: block
+#     message: "Force-push is blocked by mstrmnd alignment policy."
+
+# How often to re-inject soft context into the user message.
+# first_turn | every_turn | never
+inject_mode: first_turn
