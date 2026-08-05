@@ -52,5 +52,5 @@ class VisionModule(IntelligenceModule):
             **super().describe(ctx),
             "has_config": bool(vision),
             "principle_count": len(principles) if isinstance(principles, list) else 0,
-            "name": vision.get("name") or self.name,
+            "vision_name": vision.get("name") or "",
         }
