@@ -25,6 +25,9 @@ import yaml
 def _isolate_env(tmp_path, monkeypatch):
     hermes_home = tmp_path / ".hermes"
     hermes_home.mkdir()
+    # Keep cwd inside the temp tree so a developer's repo-local ``.mstrmnd/``
+    # overlay cannot leak into profile-only tests (lists/keys replace on merge).
+    monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("HERMES_HOME", str(hermes_home))
     monkeypatch.delenv("MSTRMND_DISABLE", raising=False)
     # Reset singleton between tests
@@ -179,6 +182,28 @@ class TestIntelligenceLayer:
         a = layer.build_pre_llm_context(session_id="s", is_first_turn=True)
         b = layer.build_pre_llm_context(session_id="s", is_first_turn=False)
         assert a and b
+
+    def test_vision_flattens_mapping_principles(self, _isolate_env):
+        """Unquoted ``key: value`` YAML list items become dicts — flatten them."""
+        mod = _load_plugin_package()
+        from hermes_plugins.mstrmnd.layer import get_layer
+        from hermes_plugins.mstrmnd.store import hermes_mstrmnd_dir
+
+        _write_yaml(
+            hermes_mstrmnd_dir() / "vision.yaml",
+            {
+                "name": "x",
+                "principles": [
+                    "plain",
+                    {"Fail open": "never block unless gated"},
+                ],
+            },
+        )
+        layer = get_layer()
+        layer.reload()
+        ctx = layer.build_pre_llm_context(session_id="s", is_first_turn=True)
+        assert ctx and "Fail open: never block unless gated" in ctx["context"]
+        assert "{'Fail open'" not in ctx["context"]
 
     def test_disable_env(self, _isolate_env, monkeypatch):
         mod = _load_plugin_package()
