@@ -29,7 +29,13 @@ class VisionModule(IntelligenceModule):
         if isinstance(principles, list) and principles:
             lines.append("Principles:")
             for item in principles:
-                text = str(item).strip()
+                # Unquoted "key: value" YAML list items become dicts; flatten them.
+                if isinstance(item, dict):
+                    text = "; ".join(
+                        f"{k}: {v}" for k, v in item.items() if str(k).strip()
+                    ).strip()
+                else:
+                    text = str(item).strip()
                 if text:
                     lines.append(f"- {text}")
 

@@ -108,6 +108,11 @@ docs/superpowers/*
 # logs, and per-session caches are never artifacts of the codebase.
 .hermes/
 
+# Project-local mstrmnd intelligence-layer overlays (seeded by
+# `hermes mstrmnd init --workspace`). Profile copies live under
+# $HERMES_HOME/mstrmnd; never commit workspace overlays.
+.mstrmnd/
+
 # Desktop/bootstrap install marker written into the managed checkout root by the
 # bootstrap installer. It is Hermes-managed runtime state, never a code change —
 # ignore it so `hermes update`'s `git stash push --include-untracked` does not
